@@ -1,18 +1,24 @@
 # Illustrator Paper Figure Skill
 
-> A Codex skill for editable Adobe Illustrator manuscript figures, MathType-ready
-> formula assets, and LaTeX PDF export quality checks.
+> A Codex skill for editable Adobe Illustrator scientific flowcharts,
+> mechanism diagrams, MathType-ready formula assets, and LaTeX PDF export
+> quality checks.
 
 This repository packages a reusable workflow for preparing publication-style
-scientific figures when the editable master lives in Adobe Illustrator. It is
-designed for LaTeX manuscripts where the final figure is a vector PDF, formulas
-must match paper typography, and user-edited `.ai` files must not be modified by
-automation.
+scientific process diagrams. It guides Codex through concept planning,
+GPT-image/GPT-image2 component prompting, local hand-drawn or line-art conversion, Illustrator
+assembly, and manuscript-scale QA. It is designed for LaTeX papers where the
+final figure is a vector PDF, formulas must match paper typography, and
+user-edited `.ai` files must not be modified by automation.
 
 ## What This Skill Provides
 
+- Flowchart-first planning for workflow and mechanism figures.
+- GPT-image/GPT-image2 component prompt patterns for isolated visual parts.
+- Local cleanup, line-art, and hand-drawn redraw guidance before Illustrator
+  assembly.
 - Safe export from Illustrator `.ai` masters through temporary copies.
-- Publication-oriented layout rules for multi-panel scientific figures.
+- Publication-oriented layout rules for multi-panel scientific flowcharts.
 - MathType/PDF/EPS formula-asset guidance for symbols and equations.
 - Figure-style consistency checks for fonts, arrows, panel labels, and boxes.
 - LaTeX integration checks using the compiled manuscript page, not only the
@@ -23,6 +29,10 @@ automation.
 
 - Export a manually edited Illustrator figure to the PDF used by LaTeX.
 - Redraw a manuscript workflow figure while keeping all elements editable.
+- Plan GPT-image/GPT-image2 prompts for components such as source objects, mechanisms,
+  particles, instruments, or engineering abstractions.
+- Convert generated raster components into simplified line-art or hand-drawn
+  assets before importing them into Illustrator.
 - Insert MathType-generated formula assets into an Illustrator figure.
 - Check whether text is centered inside workflow boxes and arrows are cleanly
   routed.
@@ -82,12 +92,20 @@ illustrator-paper-figure/
 
 ## How It Works
 
-1. Locate the manuscript figure contract, usually the `.ai` master and the
+1. Define the flowchart story and node sequence before drawing.
+2. Write one GPT-image/GPT-image2 prompt per visual component, with no text, logos,
+   signatures, borders, or visible watermarks.
+3. Generate isolated components and inspect them for structural correctness.
+4. Clean, simplify, redraw, or vectorize components locally as hand-drawn or
+   line-art assets.
+5. Import only cleaned components into Illustrator and assemble editable boxes,
+   arrows, labels, and formulas.
+6. Locate the manuscript figure contract, usually the `.ai` master and the
    `figures/Figure_N.pdf` file referenced by LaTeX.
-2. Protect the editable master by copying it to a temporary sibling `.ai` file.
-3. Open only the temporary copy in Illustrator and export a vector PDF.
-4. Publish the exported PDF to the manuscript figure path if requested.
-5. Compile or render the manuscript page and inspect the actual in-paper result.
+7. Protect the editable master by copying it to a temporary sibling `.ai` file.
+8. Open only the temporary copy in Illustrator and export a vector PDF.
+9. Publish the exported PDF to the manuscript figure path if requested.
+10. Compile or render the manuscript page and inspect the actual in-paper result.
 
 ## Export Example
 
@@ -110,6 +128,8 @@ saving, so the original Illustrator master remains untouched.
 ## Activation Examples
 
 ```text
+Use $illustrator-paper-figure to plan a scientific workflow figure and write GPT-image/GPT-image2 prompts for its visual components.
+Use $illustrator-paper-figure to convert generated mechanism components into clean line-art assets before Illustrator assembly.
 Use $illustrator-paper-figure to export an edited AI figure to PDF and verify it in LaTeX.
 Use $illustrator-paper-figure to check whether this workflow figure follows the text-box centering rules.
 Use $illustrator-paper-figure to prepare MathType formula assets for an Illustrator manuscript figure.
@@ -118,6 +138,10 @@ Use $illustrator-paper-figure to prepare MathType formula assets for an Illustra
 ## Figure Quality Checklist
 
 - The `.ai` master remains editable and is not overwritten by automation.
+- Generated components are used as references or redraw inputs, not as complete
+  AI-generated flowcharts.
+- Components with wrong anatomy, missing parts, visible watermark-like marks, or
+  text artifacts are regenerated or redrawn before use.
 - Text and formula groups are geometrically centered inside workflow boxes.
 - Arrows are clean stroked paths with filled arrowheads, routed as straight or
   orthogonal connectors where possible.
@@ -131,6 +155,10 @@ Use $illustrator-paper-figure to prepare MathType formula assets for an Illustra
 
 - Do not edit a user-corrected `.ai` master unless the user explicitly asks for
   source edits.
+- Do not use third-party watermarked images as source material. For AI-generated
+  components, avoid visible marks at prompt time and produce a clean local redraw
+  or vectorized component for the final figure.
+- Do not attempt to strip hidden provenance metadata from generated assets.
 - Do not publish local absolute paths, personal usernames, or private project
   directories in public examples.
 - Prefer derived outputs such as `Figure_N_export_check.pdf` for review, then
