@@ -34,17 +34,26 @@ Use this skill with `adobe-illustrator-scripting` when writing or debugging JSX.
    - Use restrained colors already present in the paper. For this RFT paper, the established palette includes dark brown/black strokes, muted blue, red, teal, pale blue, pale red, and pale green workflow boxes.
    - Use panel labels `(a)`, `(b)`, etc. with consistent size, weight, and placement.
    - Avoid decorative effects that will not reproduce well in a journal PDF.
+   - When a user-corrected figure exists, inspect it first and treat its arrow routing, label placement, and box typography as the style source for the next revision.
 
-5. Export deliverables.
+5. Follow the learned Fig. 1 layout conventions.
+   - Draw arrows as clean Illustrator stroked paths with filled arrowheads, not as decorative shapes. Use straight or orthogonal routes for workflow links, with arrow tips meeting the midpoint of the target box edge or object boundary.
+   - Keep arrowheads and shafts outside text areas. Leave a small visual gap from box borders unless the arrow is intentionally connected to that border.
+   - Center arrow labels along their associated arrow path, and keep labels offset enough that they do not collide with arrowheads, formulas, or panel artwork.
+   - For every colored or outlined workflow box, place the text or formula group at the geometric center of the box. Use area text or grouped MathType/PDF/EPS formula assets aligned horizontally and vertically to the box center.
+   - Do not leave operation words such as `fit` or `apply` sitting near a box border. If they belong inside the box, make them part of the centered box label; if they describe an arrow, move them outside the box and align them to the arrow.
+   - If centered text does not fit comfortably, enlarge the box or split the label into balanced lines. Do not shrink fonts below the surrounding figure's readable scale just to force a label into place.
+
+6. Export deliverables.
    - Export a vector PDF for LaTeX and submission.
    - Optionally export PNG for preview and TIFF for journal upload, but keep PDF as the LaTeX source.
    - Keep a separate copy such as `Figure_N_illustrator_redraw_manual_export.pdf` when useful, then copy it to `Figure_N.pdf`.
 
-6. Validate.
+7. Validate.
    - Compile with a non-conflicting job name when the main PDF may be open:
      `latexmk -pdf -interaction=nonstopmode -halt-on-error -jobname=main_check main.tex`
    - Render the page containing the figure with `pdftocairo` and inspect it visually.
-   - Check that text is readable, formulas render, panel labels match the caption, and no element is clipped.
+   - Check that text is readable, formulas render, panel labels match the caption, no element is clipped, arrows attach cleanly, and text/formulas sit centered inside their boxes.
    - Run the paper figure checker when available. On Windows, set `PYTHONIOENCODING=utf-8` if a script fails only while printing Unicode status icons.
 
 ## Export Script

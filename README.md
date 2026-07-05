@@ -31,5 +31,7 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   export.
 - Place mathematical symbols such as `\rho_b` and `\xi` as MathType-generated
   PDF/EPS assets when the figure must match manuscript equation typography.
+- Draw workflow arrows as clean straight or orthogonal paths, and center every
+  text/formula group geometrically inside its workflow box.
 - Validate the exported PDF by compiling the manuscript and inspecting the
   rendered page at final scale.
