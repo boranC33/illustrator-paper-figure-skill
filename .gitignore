@@ -1,0 +1,6 @@
+*_export_tmp_*.ai
+*_manual_export.pdf
+*_page*_check.png
+.uv-cache/
+__pycache__/
+*.pyc

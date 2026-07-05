@@ -1,0 +1,4 @@
+interface:
+  display_name: "Illustrator Paper Figure"
+  short_description: "Export and QA editable manuscript figures."
+  default_prompt: "Use $illustrator-paper-figure to export an edited Illustrator manuscript figure to PDF and verify it in LaTeX."
