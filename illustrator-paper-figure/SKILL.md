@@ -31,7 +31,7 @@ Use this skill with `adobe-illustrator-scripting` when writing or debugging JSX.
 
 4. Match manuscript style.
    - Use the same visible font family as the paper's other figures, typically Times New Roman for labels.
-   - Use restrained colors already present in the paper. For this RFT paper, the established palette includes dark brown/black strokes, muted blue, red, teal, pale blue, pale red, and pale green workflow boxes.
+   - Use restrained colors already present in the paper or project. For scientific workflow figures, prefer dark strokes with a small, consistent set of muted accent colors.
    - Use panel labels `(a)`, `(b)`, etc. with consistent size, weight, and placement.
    - Avoid decorative effects that will not reproduce well in a journal PDF.
    - When a user-corrected figure exists, inspect it first and treat its arrow routing, label placement, and box typography as the style source for the next revision.
@@ -64,10 +64,10 @@ Example:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
-  -File F:\RFT\skills\illustrator-paper-figure\scripts\export_ai_to_pdf.ps1 `
-  -AiPath F:\RFT\latex\figures\Figure_1_illustrator_redraw.ai `
-  -OutputPdf F:\RFT\latex\figures\Figure_1_illustrator_redraw_manual_export.pdf `
-  -PublishPdf F:\RFT\latex\figures\Figure_1.pdf
+  -File .\scripts\export_ai_to_pdf.ps1 `
+  -AiPath path\to\paper\figures\Figure_1_illustrator_master.ai `
+  -OutputPdf path\to\paper\figures\Figure_1_export_check.pdf `
+  -PublishPdf path\to\paper\figures\Figure_1.pdf
 ```
 
 After exporting, compile the paper and render the figure page for QA.
