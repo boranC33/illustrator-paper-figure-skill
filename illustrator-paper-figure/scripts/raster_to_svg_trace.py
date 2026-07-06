@@ -53,6 +53,12 @@ def otsu_threshold(values: list[int]) -> int:
     return best_threshold
 
 
+def image_values(image) -> list[int]:
+    if hasattr(image, "get_flattened_data"):
+        return list(image.get_flattened_data())
+    return list(image.getdata())
+
+
 def infer_foreground(gray_image) -> str:
     width, height = gray_image.size
     sample = max(4, min(width, height) // 20)
@@ -64,7 +70,7 @@ def infer_foreground(gray_image) -> str:
     ]
     corner_values: list[int] = []
     for box in boxes:
-        corner_values.extend(gray_image.crop(box).getdata())
+        corner_values.extend(image_values(gray_image.crop(box)))
     corner_mean = sum(corner_values) / len(corner_values)
     return "light" if corner_mean < 128 else "dark"
 
@@ -92,7 +98,7 @@ def threshold_to_pbm(
             median_filter += 1
         gray = gray.filter(ImageFilter.MedianFilter(size=median_filter))
 
-    values = list(gray.getdata())
+    values = image_values(gray)
     resolved_threshold = threshold if threshold is not None else otsu_threshold(values)
     resolved_foreground = infer_foreground(gray) if foreground == "auto" else foreground
 
