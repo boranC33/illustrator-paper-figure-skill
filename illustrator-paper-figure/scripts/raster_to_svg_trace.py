@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -120,7 +121,7 @@ def run_potrace(
     alphamax: float,
     opttolerance: float,
 ) -> None:
-    potrace = shutil.which("potrace")
+    potrace = find_potrace()
     if not potrace:
         raise RuntimeError(
             "Potrace was not found on PATH. Install Potrace, then rerun this script. "
@@ -159,6 +160,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--alphamax", type=float, default=1.0, help="Potrace corner smoothing parameter.")
     parser.add_argument("--opttolerance", type=float, default=0.2, help="Potrace curve optimization tolerance.")
     return parser.parse_args(argv)
+
+
+def find_potrace() -> str | None:
+    found = shutil.which("potrace")
+    if found:
+        return found
+
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if local_app_data:
+        install_root = Path(local_app_data) / "Programs" / "Potrace"
+        if install_root.exists():
+            candidates = sorted(install_root.glob("**/potrace.exe"), reverse=True)
+            if candidates:
+                return str(candidates[0])
+
+    return None
 
 
 def main(argv: list[str] | None = None) -> int:
