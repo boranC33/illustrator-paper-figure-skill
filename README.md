@@ -6,34 +6,47 @@
 
 This repository packages a reusable workflow for preparing publication-style
 scientific process diagrams. It guides Codex through concept planning,
-GPT-image/GPT-image2 component prompting, local hand-drawn or line-art conversion, Illustrator
-assembly, and manuscript-scale QA. It is designed for LaTeX papers where the
+GPT-image/GPT-image2 rough sketch or component prompting, local hand-drawn or
+line-art redraw, Illustrator assembly, MathType-style formula placement, manual
+fine-tuning handoff, and manuscript-scale QA. It is designed for LaTeX papers where the
 final figure is a vector PDF, formulas must match paper typography, and
 user-edited `.ai` files must not be modified by automation.
 
 ## What This Skill Provides
 
 - Flowchart-first planning for workflow and mechanism figures.
-- GPT-image/GPT-image2 component prompt patterns for isolated visual parts.
+- Rough whole-figure blueprint prompting for composition before local redraw.
+- GPT-image/GPT-image2 component prompt patterns organized by visual role,
+  not by a single research field.
 - Local cleanup, line-art, and hand-drawn redraw guidance before Illustrator
   assembly.
 - Safe export from Illustrator `.ai` masters through temporary copies.
 - Publication-oriented layout rules for multi-panel scientific flowcharts.
 - MathType/PDF/EPS formula-asset guidance for symbols and equations.
+- Formula source/export handoff rules for MathType-heavy figures.
+- General style specifications for font sizes, line weights, arrows, colors,
+  panel labels, and formula placement.
+- Manual Illustrator fine-tuning handoff guidance.
 - Figure-style consistency checks for fonts, arrows, panel labels, and boxes.
 - LaTeX integration checks using the compiled manuscript page, not only the
   standalone exported figure.
+- A lightweight LaTeX figure-asset preflight script for path, format, and
+  companion `.ai` checks.
+- A Potrace-based raster-to-SVG tracing helper for clean line-art drafts.
 - A PowerShell export helper for Windows machines with Adobe Illustrator.
 
 ## Typical Use Cases
 
 - Export a manually edited Illustrator figure to the PDF used by LaTeX.
 - Redraw a manuscript workflow figure while keeping all elements editable.
-- Plan GPT-image/GPT-image2 prompts for components such as source objects, mechanisms,
-  particles, instruments, or engineering abstractions.
+- Plan GPT-image/GPT-image2 prompts for components such as specimens, devices,
+  materials, environments, processes, setups, multi-scale structures, or
+  abstract workflow concepts.
 - Convert generated raster components into simplified line-art or hand-drawn
   assets before importing them into Illustrator.
 - Insert MathType-generated formula assets into an Illustrator figure.
+- Organize formula source files, PDF/EPS exports, and Illustrator placement
+  notes for later regeneration.
 - Check whether text is centered inside workflow boxes and arrows are cleanly
   routed.
 - Verify that a final figure is readable at manuscript scale after compilation.
@@ -86,26 +99,63 @@ illustrator-paper-figure/
 |-- SKILL.md                          # Core workflow and quality rules
 |-- agents/
 |   `-- openai.yaml                   # Codex display metadata
+|-- references/
+|   |-- component-prompt-cards.md     # General prompt cards by visual role
+|   |-- figure-contract.md            # Figure path and deliverable contract
+|   |-- figure-style-spec.md          # Font, line, color, and layout standards
+|   |-- mathtype-formula-handoff.md   # MathType source/export handoff workflow
+|   |-- sketch-to-vector-workflow.md  # Rough sketch to editable vector workflow
+|   `-- figure-qa-checklist.md        # Final publication QA checklist
 `-- scripts/
-    `-- export_ai_to_pdf.ps1          # Safe Illustrator-to-PDF exporter
+    |-- export_ai_to_pdf.ps1          # Safe Illustrator-to-PDF exporter
+    |-- preflight_figure_assets.py    # LaTeX figure asset preflight
+    `-- raster_to_svg_trace.py        # Clean raster line art to SVG via Potrace
 ```
 
 ## How It Works
 
 1. Define the flowchart story and node sequence before drawing.
-2. Write one GPT-image/GPT-image2 prompt per visual component, with no text, logos,
-   signatures, borders, or visible watermarks.
-3. Generate isolated components and inspect them for structural correctness.
-4. Clean, simplify, redraw, or vectorize components locally as hand-drawn or
+2. Write GPT-image/GPT-image2 prompts for a rough full-figure blueprint or for
+   isolated visual components, with no text, logos, signatures, borders, or
+   visible watermarks.
+3. Generate sketches/components and inspect them for structural correctness.
+4. Clean, simplify, locally redraw, or vectorize sketches/components as
    line-art assets.
 5. Import only cleaned components into Illustrator and assemble editable boxes,
    arrows, labels, and formulas.
-6. Locate the manuscript figure contract, usually the `.ai` master and the
+6. Place MathType or LaTeX PDF/EPS formula assets and keep formula sources
+   organized for regeneration.
+7. Locate the manuscript figure contract, usually the `.ai` master and the
    `figures/Figure_N.pdf` file referenced by LaTeX.
-7. Protect the editable master by copying it to a temporary sibling `.ai` file.
-8. Open only the temporary copy in Illustrator and export a vector PDF.
-9. Publish the exported PDF to the manuscript figure path if requested.
-10. Compile or render the manuscript page and inspect the actual in-paper result.
+8. Protect the editable master by copying it to a temporary sibling `.ai` file.
+9. Open only the temporary copy in Illustrator and export a vector PDF.
+10. Publish the exported PDF to the manuscript figure path if requested.
+11. Compile or render the manuscript page and inspect the actual in-paper result.
+
+## Trace Example
+
+Convert a clean raster line-art draft into an SVG for Illustrator cleanup:
+
+```bash
+python illustrator-paper-figure/scripts/raster_to_svg_trace.py \
+  path/to/component_clean.png \
+  path/to/component_trace.svg \
+  --preview-png path/to/component_threshold.png
+```
+
+The helper requires Pillow and Potrace. Inspect and simplify the resulting SVG
+after import; auto-traced paths are starting points, not final artwork.
+
+## Preflight Example
+
+Check figure assets referenced by a LaTeX manuscript:
+
+```bash
+python illustrator-paper-figure/scripts/preflight_figure_assets.py path/to/main.tex
+```
+
+Use `--require-ai` when every final figure is expected to have a nearby
+Illustrator master.
 
 ## Export Example
 
@@ -129,7 +179,8 @@ saving, so the original Illustrator master remains untouched.
 
 ```text
 Use $illustrator-paper-figure to plan a scientific workflow figure and write GPT-image/GPT-image2 prompts for its visual components.
-Use $illustrator-paper-figure to convert generated mechanism components into clean line-art assets before Illustrator assembly.
+Use $illustrator-paper-figure to generate a rough mechanism sketch, locally redraw it into vector assets, and assemble it in Illustrator.
+Use $illustrator-paper-figure to convert generated specimen, device, material, or process components into clean line-art assets before Illustrator assembly.
 Use $illustrator-paper-figure to export an edited AI figure to PDF and verify it in LaTeX.
 Use $illustrator-paper-figure to check whether this workflow figure follows the text-box centering rules.
 Use $illustrator-paper-figure to prepare MathType formula assets for an Illustrator manuscript figure.
@@ -149,6 +200,8 @@ Use $illustrator-paper-figure to prepare MathType formula assets for an Illustra
 - Panel labels match the caption and use consistent size and placement.
 - Mathematical symbols such as `\rho_b`, `\xi`, and `C_{\mathrm{sh}}` are placed
   as MathType/PDF/EPS assets when exact equation typography matters.
+- Formula source files and exported formula assets remain available for later
+  regeneration.
 - The compiled manuscript page is checked for clipping, readability, and scale.
 
 ## Safety Notes
@@ -169,6 +222,7 @@ Use $illustrator-paper-figure to prepare MathType formula assets for an Illustra
 - Windows PowerShell for the bundled exporter.
 - Adobe Illustrator installed and available through COM automation.
 - A LaTeX toolchain for manuscript compilation checks.
+- Pillow and Potrace for the optional raster-to-SVG tracing helper.
 - MathType, or pre-exported PDF/EPS formula assets, when exact formula rendering
   is required.
 

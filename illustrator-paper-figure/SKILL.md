@@ -1,97 +1,112 @@
 ---
 name: illustrator-paper-figure
-description: Create, update, export, and QA editable Adobe Illustrator workflow, mechanism, and flowchart-style manuscript figures for LaTeX papers. Use when planning a scientific process diagram, writing GPT-image or GPT-image2 prompts for figure components, generating raster components for later redraw, converting components to hand-drawn or line-art assets, assembling editable Illustrator flowcharts, exporting Illustrator figures to PDF/PNG/TIFF, protecting a user-edited AI source from accidental modification, matching typography/style across paper figures, inserting exported figures into LaTeX, or validating figure appearance in compiled PDFs.
+description: Plan, create, revise, safely export, and QA publication-grade Adobe Illustrator scientific figures for LaTeX manuscripts. Use when working with editable .ai masters, flowchart/process/mechanism diagrams, GPT-image/GPT-image2 rough sketch prompts, local image-to-vector tracing or redraw, MathType or LaTeX formula assets, journal artwork checks, PDF/PNG/TIFF export, user handoff for manual Illustrator fine-tuning, or compiled-paper figure validation.
 ---
 
 # Illustrator Paper Figure
 
-## Operating Rule
+## Primary Safety Rule
 
 Treat the `.ai` file as the editable master. If the user says they manually edited the AI file or asks only to export it, do not modify the source `.ai`. Export from a temporary copy, then replace only the derived manuscript asset such as `Figure_1.pdf`.
 
-Use this skill with `adobe-illustrator-scripting` when writing or debugging JSX. Use the paper's LaTeX skill, if available, for compile and figure checks.
+Use this skill with `adobe-illustrator-scripting` when writing or debugging Illustrator JSX/COM automation. Use the paper's LaTeX skill, if available, for manuscript compilation and figure checks.
 
-## Flowchart-First Workflow
+## Execution Router
+
+- **Export only**: confirm the `.ai` master and target PDF, run the safe export script, then validate the compiled manuscript page if a `.tex` file is available.
+- **New or rebuilt mechanism figure**: define the figure contract, plan the scientific story, create a rough GPT-image/GPT-image2 sketch or component set, redraw locally into editable/vector assets, assemble in Illustrator, add formula assets, export, then QA at manuscript scale.
+- **Component generation**: write one prompt per isolated component, reject text/watermark/anatomy errors, clean or redraw locally, and keep provenance in a named asset folder.
+- **Figure QA**: run the preflight script when a LaTeX source exists, inspect the standalone export, then inspect the rendered manuscript page.
+- **Journal submission**: read the target journal artwork rules if available, then check format, naming, fonts, line weights, raster resolution, color use, and separate-file deliverables.
+
+## References To Load As Needed
+
+- Read `references/figure-contract.md` when starting a new figure, rebuilding an existing figure, or resolving ambiguous file paths and deliverables.
+- Read `references/sketch-to-vector-workflow.md` when the user wants to generate a rough hand-drawn mechanism image and then trace/redraw it locally before Illustrator assembly.
+- Read `references/component-prompt-cards.md` when generating, revising, or cleaning AI-created visual components.
+- Read `references/figure-style-spec.md` when setting or checking font sizes, line weights, arrow geometry, colors, panel labels, formula placement, and final manuscript readability.
+- Read `references/mathtype-formula-handoff.md` when a figure uses MathType formulas or needs formula source/export organization.
+- Read `references/figure-qa-checklist.md` before final approval, journal submission, or major visual revisions.
+
+## Core Workflow
 
 1. Locate the figure contract.
    - Identify the manuscript figure path in `main.tex`, usually `figures/Figure_N.pdf`.
-   - Identify the editable source, usually `figures/Figure_N_... .ai`.
+   - Identify the editable source, usually `figures/Figure_N_*.ai`.
    - Inspect a nearby finished figure such as `Figure_4.pdf/png` for font, stroke, color, panel-label, and caption conventions.
+   - If the paper has venue-specific artwork rules, keep them visible while choosing file type, resolution, and naming.
 
-2. Plan the flowchart before drawing.
+2. Plan before drawing.
    - Define the scientific story in 3--6 nodes, for example `source inspiration -> engineering abstraction -> design translation -> modeling workflow`.
-   - Decide which nodes need literal visual components, such as animal paws, a claw, a footpad, granular particles, wake cones, or instruments.
+   - Decide which nodes need literal visual components, such as specimens, devices, materials, environments, instruments, organisms, interfaces, or hardware.
    - Decide which nodes should remain pure vector boxes, arrows, formulas, or labels.
-   - Sketch the panel structure and arrow topology before creating any image component.
+   - Sketch the panel structure, reading order, and arrow topology before creating any image component.
 
-3. Write GPT-image/GPT-image2 prompts for components.
-   - Use generated images only as source components or style references, not as the final full flowchart.
-   - Prompt for isolated components on a plain background with no text, labels, logos, signatures, borders, or visible watermarks.
-   - Specify the required view, anatomy, object count, perspective, line clarity, and manuscript-compatible style.
-   - Generate separate components when possible. It is easier to redraw a clean claw, paw, footpad, or soil bed than to repair a complete AI-generated diagram.
-   - Keep prompts and generated source files in a named asset folder so the figure provenance can be audited.
+3. Generate or source components conservatively.
+   - Use generated images only as rough sketches, source components, or style references, not as the final figure.
+   - A whole-figure rough sketch is acceptable as a redraw blueprint if it has no final text, labels, formulas, logos, signatures, borders, or visible watermarks.
+   - Prompt for isolated components on a plain background with no text, labels, logos, signatures, borders, visible watermarks, or decorative framing.
+   - Specify the required view, object count, perspective, anatomy/geometry constraints, and manuscript-compatible line style.
+   - Generate separate components when possible. It is easier to redraw a clean object, specimen, setup, or material region than to repair a complete AI-generated diagram.
+   - Keep prompts, source images, cleaned images, and redraw outputs in a named asset folder so figure provenance can be audited.
 
-4. Convert generated components locally.
+4. Convert components locally.
    - Remove plain backgrounds, crop whitespace, and simplify tonal detail before importing into Illustrator.
-   - Prefer local redraw, Illustrator Image Trace, or a controlled line-art/hand-drawn conversion over using raw generated bitmaps in the final manuscript figure.
+   - Prefer local redraw, Illustrator Image Trace, Inkscape/Potrace tracing, or controlled code-based line-art conversion over using raw generated bitmaps in the final manuscript figure.
+   - Use `scripts/raster_to_svg_trace.py` for clean high-contrast line-art drafts when a Potrace-based SVG trace is useful.
    - Reduce fur, texture, and shading detail until the core structure is readable at final figure size.
-   - If a generated image contains visible watermark-like artifacts, signatures, or stray text, reject and regenerate it or redraw the component manually. Do not use third-party watermarked images, and do not attempt to strip hidden provenance metadata.
-   - Save cleaned intermediates with explicit names such as `component_paw_clean.png`, `component_paw_lineart.svg`, and `component_paw_redraw.ai`.
+   - If a generated image contains watermark-like artifacts, signatures, stray text, wrong object counts, or confusing silhouettes, reject and regenerate or redraw it manually.
+   - Do not use third-party watermarked images, and do not attempt to strip hidden provenance metadata from generated assets.
+   - Save cleaned intermediates with explicit names such as `component_device_clean.png`, `component_device_lineart.svg`, and `component_device_redraw.ai`.
 
-5. Preserve the master.
+5. Preserve and organize the master.
    - Never run a script that opens, saves, or closes the user's source `.ai` unless they explicitly ask for edits.
    - For export-only tasks, copy the AI to a temporary sibling file and open that temporary file in Illustrator.
-   - Save PDF from the temporary document, close it without saving, and delete the temporary AI.
-
-6. Keep the graphic editable.
+   - Use semantic layers such as `01_panel_a_source`, `02_mechanism`, `04_workflow`, and `05_formula_assets`.
    - Draw boxes, arrows, labels, callouts, and panel labels as Illustrator objects.
-   - Use layers with semantic names such as `01_panel_a_source`, `04_workflow`, and `05_formula_assets`.
-   - Keep formulas as placed assets when possible. Prefer MathType-exported EPS/PDF or LaTeX-generated PDF/EPS over plain text placeholders.
-   - If a formula asset cannot be automated reliably, keep a clearly named replacement folder and use stable PDF/EPS fallbacks. Do not leave visible code-style text such as `rho_b` or `C_sh` unless the user accepts it.
    - Place cleaned raster or vectorized image components on locked reference layers, then redraw important outlines as editable paths when publication quality or future editing matters.
+
+6. Handle formulas as assets.
+   - Prefer user-provided MathType EPS/PDF formula assets when exact MathType appearance is required.
+   - Use LaTeX-generated EPS/PDF formula assets as stable fallbacks when MathType automation is unreliable.
+   - Create a formula inventory before placing formulas so source files, PDF/EPS exports, target panels, and size notes stay linked.
+   - Avoid visible code-style text such as `rho_b` or `C_sh` unless the user accepts it.
+   - Keep formula assets in clearly named folders such as `formulas_mathtype_pdf/`, `formulas_mathtype_eps/`, or `formulas_pdf/`.
+   - Place formulas as linked or embedded PDF/EPS assets in Illustrator, align them visually with surrounding labels, and keep the original formula source next to the exported asset.
 
 7. Match manuscript style.
    - Use the same visible font family as the paper's other figures, typically Times New Roman for labels.
-   - Use restrained colors already present in the paper or project. For scientific workflow figures, prefer dark strokes with a small, consistent set of muted accent colors.
-   - Use panel labels `(a)`, `(b)`, etc. with consistent size, weight, and placement.
+   - Determine final figure width first; judge font size, line weight, and spacing at that final size.
+   - Use restrained colors already present in the paper or project. Avoid color-only encoding; combine color with labels, shape, line style, or position.
+   - Keep panel labels `(a)`, `(b)`, etc. consistent in size, weight, and placement.
    - Avoid decorative effects that will not reproduce well in a journal PDF.
-   - When a user-corrected figure exists, inspect it first and treat its arrow routing, label placement, and box typography as the style source for the next revision.
+   - When a user-corrected figure exists, inspect it first and treat its arrow routing, label placement, and box typography as the style source.
 
-8. Follow the learned Fig. 1 layout conventions.
-   - Draw arrows as clean Illustrator stroked paths with filled arrowheads, not as decorative shapes. Use straight or orthogonal routes for workflow links, with arrow tips meeting the midpoint of the target box edge or object boundary.
+8. Follow flowchart layout conventions.
+   - Draw arrows as clean Illustrator stroked paths with filled arrowheads, not as decorative shapes.
+   - Use straight or orthogonal routes for workflow links, with arrow tips meeting the midpoint of the target box edge or object boundary.
    - Keep arrowheads and shafts outside text areas. Leave a small visual gap from box borders unless the arrow is intentionally connected to that border.
-   - Center arrow labels along their associated arrow path, and keep labels offset enough that they do not collide with arrowheads, formulas, or panel artwork.
-   - For every colored or outlined workflow box, place the text or formula group at the geometric center of the box. Use area text or grouped MathType/PDF/EPS formula assets aligned horizontally and vertically to the box center.
-   - Do not leave operation words such as `fit` or `apply` sitting near a box border. If they belong inside the box, make them part of the centered box label; if they describe an arrow, move them outside the box and align them to the arrow.
+   - Center arrow labels along their associated arrow path, offset enough that they do not collide with arrowheads, formulas, or panel artwork.
+   - For every colored or outlined workflow box, place the text or formula group at the geometric center of the box.
    - If centered text does not fit comfortably, enlarge the box or split the label into balanced lines. Do not shrink fonts below the surrounding figure's readable scale just to force a label into place.
 
 9. Export deliverables.
    - Export a vector PDF for LaTeX and submission.
-   - Optionally export PNG for preview and TIFF for journal upload, but keep PDF as the LaTeX source.
-   - Keep a separate copy such as `Figure_N_illustrator_redraw_manual_export.pdf` when useful, then copy it to `Figure_N.pdf`.
+   - Optionally export PNG for preview and TIFF for journal upload, but keep PDF as the LaTeX source unless the paper workflow requires another format.
+   - Keep a separate review copy such as `Figure_N_export_check.pdf` when useful, then copy it to `Figure_N.pdf` only after visual QA.
 
-10. Validate.
+10. Prepare user handoff for manual Illustrator fine-tuning.
+   - Keep the editable `.ai` master, formula source assets, cleaned/redrawn components, preview PNG, and exported PDF together.
+   - Leave only actionable manual edits for the user, such as final label nudges, formula baseline alignment, arrow rerouting, or style choices that require judgment.
+   - Do not present raw generated images as final publishable artwork.
+
+11. Validate.
+   - Run `scripts/preflight_figure_assets.py path/to/main.tex` when a LaTeX source is available.
    - Compile with a non-conflicting job name when the main PDF may be open:
      `latexmk -pdf -interaction=nonstopmode -halt-on-error -jobname=main_check main.tex`
-   - Render the page containing the figure with `pdftocairo` and inspect it visually.
+   - Render the page containing the figure with `pdftocairo` or an equivalent PDF renderer and inspect it visually.
    - Check that text is readable, formulas render, panel labels match the caption, no element is clipped, arrows attach cleanly, and text/formulas sit centered inside their boxes.
    - Run the paper figure checker when available. On Windows, set `PYTHONIOENCODING=utf-8` if a script fails only while printing Unicode status icons.
-
-## GPT-Image/GPT-Image2 Component Prompt Pattern
-
-Before generating image components, write one prompt per component. Use this pattern and fill in the bracketed fields:
-
-```text
-Create an isolated [component] for a scientific mechanism diagram.
-View: [front/side/top/three-quarter].
-Style: clean hand-drawn manuscript illustration, simplified linework, light neutral shading, high structural clarity.
-Content constraints: [exact anatomy/object count/geometry that must be correct].
-Background: plain white or transparent-looking background.
-Do not include text, labels, arrows, logos, signatures, borders, visible watermarks, captions, or decorative framing.
-The image will be redrawn/vectorized in Adobe Illustrator and combined with editable flowchart boxes and arrows.
-```
-
-After generation, inspect the component before using it. Reject images with wrong object counts, missing parts, confusing silhouettes, excessive texture, visible watermark-like marks, or text artifacts.
 
 ## Export Script
 
@@ -109,22 +124,20 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 After exporting, compile the paper and render the figure page for QA.
 
-## Formula Guidance
+## Local Trace Script
 
-MathType is preferred when the user requests MathType-written formulas, but batch export can be unreliable through Word/MathType automation. Use this order:
+Use `scripts/raster_to_svg_trace.py` for clean black/white or high-contrast raster sketches that should become editable SVG outlines before Illustrator cleanup. It requires Pillow and Potrace.
 
-1. User-provided MathType EPS/PDF formula assets.
-2. MathType-exported assets created interactively through Word/MathType export tools.
-3. LaTeX-generated EPS/PDF formula assets as stable placeholders.
-4. Plain Illustrator text only for non-mathematical labels.
+Example:
 
-Keep formula assets in clearly named folders, for example:
+```bash
+python scripts/raster_to_svg_trace.py \
+  path/to/component_clean.png \
+  path/to/component_trace.svg \
+  --preview-png path/to/component_threshold.png
+```
 
-- `figures/fig1_illustrator_assets/formulas_mathtype_pdf/`
-- `figures/fig1_illustrator_assets/formulas_mathtype_eps/`
-- `figures/fig1_illustrator_assets/formulas_pdf/`
-
-When a formula source changes, regenerate the derived PDF and re-export the AI-derived figure.
+Inspect the SVG after import. Replace noisy auto-traced paths with clean manual paths when readability or geometry matters.
 
 ## Common Failure Modes
 
