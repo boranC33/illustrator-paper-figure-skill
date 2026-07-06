@@ -12,6 +12,8 @@ Use this contract before creating, rebuilding, or exporting a manuscript figure.
 - Component asset folder, for example `figures/fig1_illustrator_assets/`.
 - Target journal or venue artwork requirements, if known.
 - Nearby style reference figure, for example `figures/Figure_4.pdf`.
+- Art direction contract, for example visual class, finish level, detail density, component realism, line language, material cues, and color strategy.
+- Local component library decision: `none`, `create project-local library`, or `reuse project-local library`.
 
 ## Scientific Story
 
@@ -36,6 +38,8 @@ For each node, decide whether it should be:
 - Grouping: panels, stages, input/output lanes, or mechanism zones.
 - Final width: single-column, double-column, or full-page.
 - Minimum readable label size at final width.
+- Visual hierarchy: primary visual focus, secondary details, and label/callout priority.
+- Detail strategy: which components need domain-specific geometry or material/state cues, and which should stay simplified.
 
 ## Deliverables
 
@@ -46,6 +50,7 @@ Prefer this deliverable set unless the journal asks otherwise:
 - `.png` preview for quick visual inspection.
 - `.tif` or `.tiff` only when the journal upload system requires it.
 - Asset folder containing prompts, original generated components, cleaned components, redraws, and formula assets.
+- Optional project-local component library only when the user chooses it for repeated components across figures.
 
 ## Naming Pattern
 

@@ -36,6 +36,26 @@ Use this checklist before publishing a derived figure asset to the manuscript pa
 - Mechanism components have correct object counts, orientation, and relation to the text.
 - Repeated objects use consistent scale unless a scale change is intentional and clear.
 
+## Visual Polish
+
+- The figure follows an explicit art direction contract rather than defaulting to generic boxes and arrows.
+- The primary mechanism or object is visually dominant without being overwhelmed by arrows or labels.
+- Important components have domain-specific silhouettes, proportions, cutaways, hatching, material bands, or other meaningful detail.
+- Line weights create hierarchy: outer contours, internal details, arrows, callouts, and hatching are not all the same weight.
+- Colors use neutral structure plus semantic accents, not saturated decoration.
+- Detail density supports the mechanism: enough to look credible, not enough to clutter the reading path.
+- The figure does not look like default PowerPoint or a raw script output.
+
+## Scripted Layout QA
+
+- Text is measured after the final font and size are assigned, not positioned from guessed string length.
+- Important objects are registered with semantic bounds: title, panel labels, boxes, formulas, arrows, callouts, and repeated panels.
+- Box labels pass an inside-parent check with a visible margin.
+- Text and formulas do not overlap arrow shafts or arrowheads in the internal layout registry.
+- Titles, panel labels, legends, and captions remain inside the artboard bounds.
+- Any automatic nudging is followed by re-registering the final bounds before export.
+- The script fails before export when layout checks fail, rather than producing a known-bad PDF.
+
 ## Color And Accessibility
 
 - Color palette is restrained and consistent with nearby figures.
@@ -57,6 +77,7 @@ Use this checklist before publishing a derived figure asset to the manuscript pa
 - Editable `.ai` master opens without missing linked assets.
 - Formula source/export files are included near the `.ai` master.
 - Preview PNG and review PDF reflect the current `.ai` state.
+- Optional project-local component libraries include a manifest and are not silently created for one-off figures.
 - Remaining manual edits are listed as specific actions, not vague requests to "polish the figure."
 
 ## Failure Response

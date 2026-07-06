@@ -1,4 +1,4 @@
 interface:
   display_name: "Illustrator Paper Figure"
-  short_description: "Turn rough AI sketches into editable manuscript figures."
-  default_prompt: "Use $illustrator-paper-figure to plan a scientific mechanism figure, prompt a rough GPT-image/GPT-image2 sketch, redraw it locally into editable/vector assets, assemble it in Illustrator with formula assets, and verify the exported PDF in LaTeX."
+  short_description: "Create polished editable Illustrator figures with QA."
+  default_prompt: "Use $illustrator-paper-figure to art-direct, script, layout-check, export, and QA a polished editable Illustrator scientific mechanism figure with PDF/PNG deliverables."
