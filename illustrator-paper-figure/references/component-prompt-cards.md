@@ -32,6 +32,47 @@ Keep the drawing unlabeled. Do not include text, letters, arrows with labels, fo
 The image will be used only as a redraw blueprint. Final labels, arrows, formulas, and panel marks will be created manually in Adobe Illustrator.
 ```
 
+## Split Prompt Set For Complex Mechanism Figures
+
+Use when a whole-figure prompt becomes long, contradictory, or overloaded with geometry, style, and negative constraints. Generate the overall composition first, then generate only the components that need more detail.
+
+```text
+01_overall_composition
+Create an unlabeled wide blueprint for a polished scientific manuscript mechanism figure about [mechanism].
+Show [primary object] centered on a plain white background, with [main input/source] on one side, [transport/interaction] in the middle, and [output/boundary] on the other side.
+Style: refined technical illustration, vector-like linework, restrained semantic colors, subtle depth.
+Leave blank space for labels and arrows to be added later in Illustrator.
+No text, no labels, no numbers, no formulas, no watermark, no border.
+```
+
+```text
+02_primary_object_component
+Create an isolated [primary object] component for a scientific manuscript figure.
+View: [side/cutaway/isometric/top].
+Required features: [outer shape, internal layers, ports, texture, repeating units, material boundaries].
+Style: clean technical illustration, crisp outlines, restrained neutral color, readable at small size.
+Background: plain white.
+No text, labels, arrows, dimensions, logos, watermarks, or borders.
+```
+
+```text
+03_process_detail_inset
+Create an isolated magnified detail component showing [local mechanism].
+Required features: [pores, droplets, cells, particles, interface, deformation, phase change, signal path, or state transition].
+Style: manuscript technical illustration with clear boundaries and limited texture.
+Background: plain white.
+No text, labels, arrows, numbers, formulas, scale bars, logos, watermarks, or borders.
+```
+
+```text
+04_output_or_boundary_component
+Create an isolated [output/boundary/component] for the right/terminal/downstream region of a scientific figure.
+Required features: [fins, outlet, detector, product, boundary layer, droplets, exhaust, response, or final state].
+Style: polished technical illustration, consistent with the primary object prompt.
+Background: plain white.
+No text, labels, arrows, numbers, formulas, logos, watermarks, or borders.
+```
+
 ## Object, Specimen, Or Device
 
 Use for physical things: lab samples, tools, machines, sensors, chips, electrodes, spacecraft parts, implants, organisms, organs, cells, particles, product prototypes, or field hardware.

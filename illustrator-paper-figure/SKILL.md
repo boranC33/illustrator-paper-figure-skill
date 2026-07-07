@@ -11,11 +11,17 @@ Treat the `.ai` file as the editable master. If the user says they manually edit
 
 This skill includes the Illustrator JSX/COM scripting guidance needed for figure automation. Do not require a separate `adobe-illustrator-scripting` skill before writing or debugging Illustrator scripts. Use the paper's LaTeX skill, if available, for manuscript compilation and figure checks.
 
+## Aesthetic-First Rule
+
+When the user asks for a polished, refined, high-impact, Nature-style, graphical-abstract-like, or less "scripted" mechanism figure, or criticizes an output as ugly, crude, flat, not detailed, or not refined, do not start with a pure vector-first/script-first redraw unless the user explicitly wants deterministic simple schematics. First create or request a GPT-image/GPT-image2 rough whole-figure blueprint or isolated component references, then locally redraw the selected design into editable Illustrator vectors.
+
+If image generation is unavailable in the current environment, stop the visual-design path long enough to report that limitation and provide the exact GPT-image/GPT-image2 prompt(s) needed. Do not silently fall back to a generic scripted diagram and call it polished.
+
 ## Execution Router
 
 - **Export only**: confirm the `.ai` master and target PDF, run the safe export script, then validate the compiled manuscript page if a `.tex` file is available.
-- **New or rebuilt mechanism figure**: define the figure contract, define an art direction contract, plan the scientific story, read scripted layout guidance, optionally adapt `scripts/mechanism_figure_template.jsx`, create a rough GPT-image/GPT-image2 sketch or component set when useful, redraw locally into editable/vector assets, assemble in Illustrator, add formula assets, export, then QA at manuscript scale and visual-polish scale.
-- **Visual polish/rebuild**: read `references/art-direction-contract.md` and `references/mechanism-figure-style-rubric.md`, identify why the figure looks crude, then revise geometry detail, line hierarchy, material cues, color strategy, and visual focus before doing another export.
+- **New or rebuilt mechanism figure**: define the figure contract, define an art direction contract, plan the scientific story, choose the aesthetic route, then proceed. For polished/manuscript/hero mechanism figures, read `references/sketch-to-vector-workflow.md`, create 2--4 GPT-image/GPT-image2 unlabeled blueprint variations or component references when tooling is available, select a composition, redraw locally into editable/vector assets, assemble in Illustrator, add labels/formulas/arrows, export, then QA at manuscript scale and visual-polish scale. Use vector-first scripting directly only for simple deterministic diagrams, tight reproduction of an existing layout, or when image generation is unavailable and the user accepts the limitation.
+- **Visual polish/rebuild**: read `references/art-direction-contract.md`, `references/sketch-to-vector-workflow.md`, and `references/mechanism-figure-style-rubric.md`, identify why the figure looks crude, generate or request a better unlabeled visual blueprint/component reference when the problem is composition, silhouette, detail, or material language, then redraw geometry detail, line hierarchy, material cues, color strategy, and visual focus before doing another export.
 - **Illustrator automation**: read `references/illustrator-scripting-quick-reference.md`, write JSX with semantic layers and helper functions, use `scripts/layout_helpers.jsx` for text measurement and collision checks, use `scripts/technical_illustration_style.jsx` for generic publication-grade visual tokens when suitable, run it with `scripts/run_illustrator_jsx.ps1` on Windows, then inspect exported PDF/PNG.
 - **Optional local component library**: do not build a domain component library by default. If the same domain objects will be reused across figures, read `references/local-component-library-option.md`, ask the user whether to scaffold a project-local library, then run `scripts/init_local_component_library.py` only after that decision.
 - **Component generation**: write one prompt per isolated component, reject text/watermark/anatomy errors, clean or redraw locally, and keep provenance in a named asset folder.
@@ -31,7 +37,7 @@ This skill includes the Illustrator JSX/COM scripting guidance needed for figure
 - Read `references/scripted-layout-and-qa.md` before scripting figures with repeated panels, many labels, arrows, callouts, formulas, or any prior overlap issues.
 - Read `references/local-component-library-option.md` when the work may reuse domain-specific components across multiple figures or when the user asks for reusable components.
 - Read `references/windows-illustrator-automation.md` when running Illustrator from PowerShell, handling UTF-8/non-ASCII labels, or rendering PDF QA images on Windows.
-- Read `references/sketch-to-vector-workflow.md` when the user wants to generate a rough hand-drawn mechanism image and then trace/redraw it locally before Illustrator assembly.
+- Read `references/sketch-to-vector-workflow.md` when the user wants to generate a rough hand-drawn mechanism image and then trace/redraw it locally before Illustrator assembly, and whenever the figure's main risk is visual polish rather than only layout correctness.
 - Read `references/component-prompt-cards.md` when generating, revising, or cleaning AI-created visual components.
 - Read `references/figure-style-spec.md` when setting or checking font sizes, line weights, arrow geometry, colors, panel labels, formula placement, and final manuscript readability.
 - Read `references/mathtype-formula-handoff.md` when a figure uses MathType formulas or needs formula source/export organization.
@@ -47,6 +53,10 @@ This skill includes the Illustrator JSX/COM scripting guidance needed for figure
 
 2. Define the art direction before drawing.
    - Use `references/art-direction-contract.md` to choose the visual class, finish level, detail density, component realism, line language, and color strategy.
+   - Make an explicit route decision: `sketch-to-vector`, `component-reference-to-vector`, or `vector-first`.
+   - Choose `sketch-to-vector` by default for polished mechanism figures, hero graphical abstracts, figures with no nearby style reference, or any revision responding to "ugly", "not refined", "too scripted", "flat", or "missing detail".
+   - Choose `component-reference-to-vector` when the layout is already known but individual objects lack credible silhouettes, material cues, or domain detail.
+   - Choose `vector-first` only when the desired output is a simple deterministic schematic, an existing figure must be reproduced exactly, or image generation is unavailable and the user accepts a lower aesthetic ceiling.
    - Decide whether the figure is a one-off custom redraw or part of a project that benefits from a local component library.
    - For one-off figures, do not create a component library. Draw the needed parts directly in the figure asset folder.
    - For repeated domain components across a paper/project, ask the user whether to scaffold a project-local component library.
@@ -60,6 +70,8 @@ This skill includes the Illustrator JSX/COM scripting guidance needed for figure
 
 4. Generate or source components conservatively.
    - Use generated images only as rough sketches, source components, or style references, not as the final figure.
+   - For a `sketch-to-vector` route, generate 2--4 unlabeled GPT-image/GPT-image2 whole-figure blueprint variations before scripting the final Illustrator figure. Pick one visual direction and redraw it; do not average all variations into a generic layout.
+   - If a whole-figure prompt grows long or contains too many constraints, split it into short role-specific prompts: one overall composition blueprint plus isolated component/detail prompts. Generate the composition first, then generate only the component references needed to improve silhouettes, material cues, or insets.
    - A whole-figure rough sketch is acceptable as a redraw blueprint if it has no final text, labels, formulas, logos, signatures, borders, or visible watermarks.
    - Prompt for isolated components on a plain background with no text, labels, logos, signatures, borders, visible watermarks, or decorative framing.
    - Specify the required view, object count, perspective, anatomy/geometry constraints, and manuscript-compatible line style.
@@ -79,6 +91,8 @@ This skill includes the Illustrator JSX/COM scripting guidance needed for figure
    - Never run a script that opens, saves, or closes the user's source `.ai` unless they explicitly ask for edits.
    - For export-only tasks, copy the AI to a temporary sibling file and open that temporary file in Illustrator.
    - For new scripted figures, start from `scripts/mechanism_figure_template.jsx` when a vector mechanism/process layout is useful.
+   - If the route is `sketch-to-vector`, place the selected rough sketch on a locked, low-opacity reference layer or keep it as an external redraw guide. The final exported artwork should be recreated with editable paths, fills, labels, arrows, and formula assets.
+   - Do not let raw generated reference PNGs leak into final PDF/PNG exports. Illustrator may embed hidden placed rasters into PDFs. Prefer keeping generated references external; if references are placed in the AI master, save the master first, then remove or delete the reference layer before exporting manuscript PDF/PNG.
    - When writing JSX, use the bundled Illustrator quick reference instead of assuming DOM signatures from memory.
    - When labels, arrows, or boxes may collide, add `// layout-helpers: true`, register object bounds with `FigureLayout.Registry`, and fail before export if text overlaps arrows or leaves its parent box.
    - When the figure needs a more polished technical-illustration finish, add `// technical-style: true` and use `TechnicalFigureStyle` for neutral palettes, line hierarchy, material bands, hatching, and semantic state colors.
@@ -130,6 +144,8 @@ This skill includes the Illustrator JSX/COM scripting guidance needed for figure
    - Render the page containing the figure after manuscript compilation when a `.tex` source is available.
    - For scripted figures, run internal layout QA before export by checking parent containment, text-arrow overlap, title/panel margins, and artboard containment.
    - Run visual-polish QA with `references/mechanism-figure-style-rubric.md` when the figure is a mechanism/process diagram.
+   - For aesthetic-first routes, confirm that the final figure can be traced back to an intentional generated or user-provided visual reference, and that the reference did not leak into the final export as a raw low-quality bitmap.
+   - Check derived PDF file size when generated references were used; an unexpectedly large vector PDF can indicate hidden raster references were embedded.
    - Check that text is readable, formulas render, panel labels match the caption, no element is clipped, arrows attach cleanly, and text/formulas sit centered inside their boxes.
    - Run the paper figure checker when available. On Windows, set `PYTHONIOENCODING=utf-8` if a script fails only while printing Unicode status icons.
 
